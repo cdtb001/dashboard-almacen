@@ -7,19 +7,29 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT || 4000),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  ssl: {
+    minVersion: 'TLSv1.2',
+    rejectUnauthorized: true
+  },
+  waitForConnections: true,
+  connectionLimit: 10,
+  maxIdle: 10,
+  enableKeepAlive: true
 });
 
-db.connect((error) => {
+db.getConnection((error, connection) => {
   if (error) {
     console.log('Error de conexión a MySQL:', error);
     return;
   }
   console.log('Conectado a MySQL');
+  connection.release();
 });
 
 app.use(cors());
@@ -36,14 +46,19 @@ app.get('/api/conceptos', (req, res) => {
 });
 
 app.post('/api/conceptos', (req, res) => {
+  console.log('BODY conceptos:', req.body);
+
   const { clave, descripcion } = req.body;
+
   db.query(
     'INSERT INTO conceptos (clave, descripcion) VALUES (?, ?)',
     [clave, descripcion],
     (error, result) => {
       if (error) {
-        return res.status(500).json({ error: 'Error al guardar concepto' });
+        console.log('ERROR SQL conceptos:', error);
+        return res.status(500).json({ error: error.message });
       }
+
       res.json({ mensaje: 'Concepto guardado', id: result.insertId });
     }
   );
