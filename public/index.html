@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Almacén</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h1>Almacén</h1>
+
+      <div class="menu-group">
+        <h2>Catálogos</h2>
+        <button class="menu-btn active" data-modulo="conceptos">Conceptos</button>
+        <button class="menu-btn" data-modulo="destinos">Destinos</button>
+        <button class="menu-btn" data-modulo="productos">Productos</button>
+        <button class="menu-btn" data-modulo="unidades">Unidades de Medida</button>
+      </div>
+
+      <div class="menu-group">
+        <h2>Documentos</h2>
+        <button class="menu-btn" data-modulo="entradas">Entradas</button>
+        <button class="menu-btn" data-modulo="salidas">Salidas</button>
+      </div>
+    </aside>
+
+    <main class="contenido">
+      <header class="topbar">
+        <h2 id="titulo-modulo">Catálogo de Conceptos</h2>
+      </header>
+
+      <section id="vista-modulo"></section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
