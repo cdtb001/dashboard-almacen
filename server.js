@@ -46,19 +46,14 @@ app.get('/api/conceptos', (req, res) => {
 });
 
 app.post('/api/conceptos', (req, res) => {
-  console.log('BODY conceptos:', req.body);
-
   const { clave, descripcion } = req.body;
-
   db.query(
     'INSERT INTO conceptos (clave, descripcion) VALUES (?, ?)',
     [clave, descripcion],
     (error, result) => {
       if (error) {
-        console.log('ERROR SQL conceptos:', error);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: 'Error al guardar concepto' });
       }
-
       res.json({ mensaje: 'Concepto guardado', id: result.insertId });
     }
   );
